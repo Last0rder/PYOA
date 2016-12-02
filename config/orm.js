@@ -9,14 +9,11 @@ var orm = {
 		var queryString = 'SELECT * FROM PLAYERS WHERE id = ' + userID;
 		// connection query
 		connection.query(queryString, function (err, data) {
-		if (err) throw (err);
 		// store the user's progression/clue number into var userClue for further use
 		var userClue = data.progression;
 		// console.log to test
 		console.log(data);
 		console.log(userClue);
-		// return data as a json
-	    res.json(data);
 		})
 	},
 	
@@ -27,11 +24,8 @@ var orm = {
 		var queryString = 'SELECT * FROM CLUE_TABLE1 WHERE clue_num = ' + userClue;
 		// connection query
 		connection.query(queryString, function (err, data) {
-		if (err) throw (err);
 		// console.log for test
 		console.log(data);
-        // return json
-        res.json(data);
 		// store the lat and lng into variables
 		var	clueLat = data.lat
 		var	clueLng = data.lng
