@@ -6,7 +6,8 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
 var mysql = require('mysql');
-var orm = require('/config/orm.js');
+var orm = require('./config/orm.js');
+var distance = require('gps-distance');
 
 // ==============================================================================
 // EXPRESS CONFIGURATION
@@ -59,14 +60,15 @@ app.get("/", function(req, res) {
 app.get("/location", function(req, res) {
     console.log("Check User Location")
     res.sendFile(path.join(__dirname + '/app/public/startbootstrap-grayscale-gh-pages/index.html'));
+    var result = distance(userlat, userlng, cluelat, cluelng);
+    
 });
 // 4. GET (/api/:user/cluenum) | Return a JSON that specifies "which clue" the user is currently seeking
 app.get("/api/:user/cluenum", function(req, res) {
+    // grab userID from the route
     var userID = req.params.user;
-    console.log("API call")
+    // run orm function to grab the user's database entry which has the current clue they are on. Then returns json.
     orm.findClueNum(userID);
-    console.log(userInfo)
-    res.json(userInfo)
 });
     // {
     //     user_id: 12121313,
@@ -83,8 +85,8 @@ app.get("/api/:user/cluenum", function(req, res) {
 
 // 5. POST (/api/clue_location) | User sends the server their current location + clue_number like the below:
 app.post("/api/clue_location", function(req, res) {
-    
-    orm.checkDist()
+    // runs orm function to check how far the user is from the current goal location.
+    orm.checkDist(userClue);
 });
     // {
     //     clue_num: 3,

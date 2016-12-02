@@ -1,34 +1,51 @@
 var connection = require('./connection.js');
 
 // object relational mapper (ORM)
-
 var orm = {
+	
+	// Finds which clue the player is currently on, which is stored in the PLAYERS database.
 	findClueNum: function (userID) {
+		// craft the query string based on the userID pulled from URL req.params
 		var queryString = 'SELECT * FROM PLAYERS WHERE id = ' + userID;
-		connection.query(querystring, function (err, result) {
-		var userClue = result;
+		// connection query
+		connection.query(querystring, function (err, data) {
+		if (err) throw (err);
+		// store the user's progression/clue number into var userClue for further use
+		var userClue = data.progression;
+		// console.log to test
+		console.log(data);
+		console.log(userClue);
+		// return data as a json
+	    res.json(data);
 		})
-	};
+	},
+	
 
-	// selectWhere: function (tableInput, colToSearch, valOfCol) {
-	// 	var queryString = 'SELECT * FROM ' + tableInput + ' WHERE ' + colToSearch + ' = ?';
-	// 	connection.query(queryString, [valOfCol], function (err, result) {
-	// 		console.log(result);
-	// 	});
-	// },
-	// selectAndOrder: function (whatToSelect, table, orderCol, orderBy) {
-	// 	var queryString = 'SELECT ' + whatToSelect + ' FROM ' + table + ' ORDER BY ' + orderCol + ' ' + orderBy;
-	// 	console.log(queryString);
-	// 	connection.query(queryString, function (err, result) {
-	// 		console.log(result);
-	// 	});
-	// },
-	// findWhoHasMost: function (tableOneCol, tableTwoForeignKey, tableOne, tableTwo) {
-	// 	var queryString = 'SELECT ' + tableOneCol + ', COUNT(' + tableOneCol + ') AS count FROM ' + tableOne + ' LEFT JOIN ' + tableTwo + ' ON ' + tableTwo + '.' + tableTwoForeignKey + '= ' + tableOne + '.id GROUP BY ' + tableOneCol + ' ORDER BY count desc LIMIT 1';
-	// 	connection.query(queryString, function (err, result) {
-	// 		console.log(result);
-	// 	});
-	// }
+	// Checks the distance between user and location, needs to grab the clue's lat and lng from the CLUE_TABLE1 database.
+	checkDist: function (userClue) {
+		// craft the query string based on the player's current progression which is pulled from the previous function.
+		var queryString = 'SELECT * FROM CLUE_TABLE1 WHERE clue_num = ' + userClue;
+		// connection query
+		connection.query(querystring, function (err, data) {
+		if (err) throw (err);
+		// console.log for test
+		console.log(data);
+        // return json
+        res.json(data);
+		// store the lat and lng into variables
+		var	clueLat = data.lat
+		var	clueLng = data.lng
+		console.log("clueLat = " + clueLat + " clueLng = " + clueLng)
+		})
+		// Grab user's location from HTML5
+		navigator.geolocation.getCurrentPosition(function(position) {
+        var userLat = position.coords.latitude
+        var userLng = position.coords.longitude
+        })
+        // checks the distance using gps-distance npm package
+        var userDistance = distance(clueLat, clueLng, userLat, userLng);
+	}
 };
 
+// exports orm
 module.exports = orm;
