@@ -9,6 +9,12 @@ var mysql = require('mysql');
 var orm = require('./config/orm.js');
 var distance = require('gps-distance');
 
+// =================
+var userLat = "";
+var userLng = "";
+var clueLat = "";
+var clueLng = "";
+// =================
 // ==============================================================================
 // EXPRESS CONFIGURATION
 // This sets up the basic properties for our express server
@@ -29,7 +35,6 @@ app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 
 // static directory
 app.use(express.static('app/public'));
-
 
 // ================================================================================
 // ROUTER
@@ -59,9 +64,6 @@ app.get("/", function(req, res) {
 
 app.get("/location", function(req, res) {
     console.log("Check User Location")
-    res.sendFile(path.join(__dirname + '/app/public/startbootstrap-grayscale-gh-pages/index.html'));
-    var result = distance(userlat, userlng, cluelat, cluelng);
-    
 });
 // 4. GET (/api/:user/cluenum) | Return a JSON that specifies "which clue" the user is currently seeking
 app.get("/api/:user/cluenum", function(req, res) {
