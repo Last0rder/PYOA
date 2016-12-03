@@ -55,7 +55,7 @@ app.listen(PORT, function() {
 
 app.get("/", function(req, res) {
     console.log("Grab Index")
-  res.sendFile(path.join(__dirname + '/app/public/startbootstrap-grayscale-gh-pages/index.html'));
+  res.sendFile(path.join(__dirname + '/app/public/html/index.html'));
 });
 
 // 2. GENERIC AUTH STUFF (FILL IN LATER)
@@ -65,6 +65,7 @@ app.get("/", function(req, res) {
 
 app.get("/location", function(req, res) {
     console.log("Check User Location")
+    // Do something here. Not sure just what yet.
 });
 // 4. GET (/api/:user/cluenum) | Return a JSON that specifies "which clue" the user is currently seeking
 app.get("/api/:user/cluenum", function(req, res) {
@@ -72,6 +73,7 @@ app.get("/api/:user/cluenum", function(req, res) {
     var userID = req.params.user;
     // run orm function to grab the user's database entry which has the current clue they are on. Then returns json.
     orm.findClueNum(userID);
+    res.json(findClueNum(userID));
 });
                                                 // ================= EXAMPLE =====================
                                                 // {
@@ -91,6 +93,7 @@ app.get("/api/:user/cluenum", function(req, res) {
 app.post("/api/clue_location", function(req, res) {
     // runs orm function to check how far the user is from the current goal location.
     orm.checkDist(userClue);
+    res.json(userClue);
 });
                                                 // {
                                                 //     clue_num: 3,
