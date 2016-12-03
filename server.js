@@ -73,7 +73,7 @@ app.get("/api/:user/cluenum", function(req, res) {
     var userID = req.params.user;
     // run orm function to grab the user's database entry which has the current clue they are on. Then returns json.
     orm.findClueNum(userID);
-    res.json(findClueNum(userID));
+    res.json("something goes here");
 });
                                                 // ================= EXAMPLE =====================
                                                 // {
